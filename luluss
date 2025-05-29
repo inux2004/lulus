@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengumuman Kelulusan - SDN 71 Parepare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .countdown { display: flex; gap: 1rem; }
+    .hidden { display: none; }
+    .show { display: block; }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-purple-200 to-white min-h-screen text-gray-800">
+  <!-- Header -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-blue-500 to-blue-700 text-white p-4 shadow-md">
+    <div class="flex items-center space-x-4">
+      <div class="w-16 h-16 bg-transparent"></div> <!-- Tempat logo -->
+      <div>
+        <h1 class="text-xl font-bold">PENGUMUMAN KELULUSAN</h1>
+        <h2 class="text-md">UPTD SD NEGERI 71 PAREPARE</h2>
+        <p class="text-sm">Tahun Ajaran 2024/2025</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-28 max-w-xl mx-auto p-4">
+    <!-- Countdown Section -->
+    <section id="countdown-section" class="text-center">
+      <p class="text-lg font-semibold" id="countdown-message">Pengumuman dibuka pada 29 Mei 2025 pukul 16:10 WIB</p>
+      <div id="countdown" class="countdown justify-center mt-4 text-lg font-semibold"></div>
+    </section>
+
+    <!-- Cek Kelulusan Section -->
+    <section id="check-section" class="hidden mt-10 text-center">
+      <h3 class="text-lg font-bold text-green-600">Pengumuman Sudah Dibuka!</h3>
+      <input id="nisn-input" type="text" placeholder="Masukkan NISN" class="mt-4 px-4 py-2 border rounded w-full max-w-md mx-auto" />
+      <button onclick="checkResult()" class="mt-2 px-6 py-2 bg-blue-600 text-white rounded">Cek Hasil</button>
+      <div id="result" class="mt-6"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center mt-20 text-sm text-gray-600">
+    &copy; 2025 UPTD SD NEGERI 71 PAREPARE
+  </footer>
+
+  <!-- Fireworks and Rain Animations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const countdownDate = new Date("2025-05-29T16:10:00+07:00").getTime();
+
+    const countdownEl = document.getElementById("countdown");
+    const countdownSection = document.getElementById("countdown-section");
+    const checkSection = document.getElementById("check-section");
+    const resultDiv = document.getElementById("result");
+
+    const students = [
+      { nama: "Andi Becce1", nisn: "123456", nilai: 80, status: "Lulus" },
+      { nama: "Andi Baso2", nisn: "789101", nilai: 50, status: "Tidak Lulus" },
+      { nama: "Andi Becce2", nisn: "1454746", nilai: 87, status: "Lulus" },
+      { nama: "Andi Baso3", nisn: "2120391", nilai: 78, status: "Lulus" },
+      { nama: "Andi Becce3", nisn: "2786036", nilai: 90, status: "Lulus" },
+      { nama: "Andi Baso4", nisn: "3451681", nilai: 98, status: "Lulus" },
+      { nama: "Andi Becce4", nisn: "4117326", nilai: 80, status: "Lulus" },
+      { nama: "Andi Baso5", nisn: "4782971", nilai: 55, status: "Tidak Lulus" },
+      { nama: "Andi Becce5", nisn: "5448616", nilai: 40, status: "Tidak Lulus" }
+    ];
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+
+      if (distance <= 0) {
+        countdownSection.classList.add("hidden");
+        checkSection.classList.remove("hidden");
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = `
+        <span>${days} Hari</span>
+        <span>${hours} Jam</span>
+        <span>${minutes} Menit</span>
+        <span>${seconds} Detik</span>
+      `;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function checkResult() {
+      resultDiv.innerHTML = "";
+      const nisn = document.getElementById("nisn-input").value.trim();
+      const student = students.find(s => s.nisn === nisn);
+
+      if (!student) {
+        resultDiv.innerHTML = `<p class='text-red-600 font-semibold'>NISN tidak ditemukan.</p>`;
+        return;
+      }
+
+      if (student.status === "Lulus") {
+        resultDiv.innerHTML = `
+          <div class="bg-green-100 p-6 rounded shadow animate-bounce">
+            <h4 class="text-green-700 font-bold text-xl">Selamat ${student.nama}!</h4>
+            <p>Anda dinyatakan <strong>LULUS</strong> dengan nilai rata-rata ${student.nilai}</p>
+          </div>
+        `;
+        confetti();
+      } else {
+        resultDiv.innerHTML = `
+          <div class="bg-red-100 p-6 rounded shadow animate-pulse">
+            <h4 class="text-red-700 font-bold text-xl">Mohon Maaf ${student.nama}</h4>
+            <p>Anda <strong>TIDAK LULUS</strong> dengan nilai rata-rata ${student.nilai}</p>
+          </div>
+        `;
+        // Simple rain effect as text animation
+        let rain = document.createElement("div");
+        rain.innerHTML = "<p class='text-blue-700'>\u2614</p>".repeat(30);
+        resultDiv.appendChild(rain);
+      }
+    }
+  </script>
+</body>
+</html>
